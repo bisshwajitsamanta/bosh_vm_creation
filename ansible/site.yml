@@ -1,0 +1,8 @@
+---
+- name: Install Git, Configure Bosh CLI
+  hosts: all
+  become: yes
+
+  roles:
+    - git
+    - bosh_cli

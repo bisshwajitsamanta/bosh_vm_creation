@@ -1,0 +1,30 @@
+---
+- name: Install Bosh Dependency Packages
+  apt: 
+    name: "{{ item }}"
+    state: present
+  
+  with_items:
+    - build-essential
+    - zlibc
+    - zlib1g-dev
+    - ruby
+    - ruby-dev
+    - openssl
+    - libxslt-dev
+    - libxml2-dev
+    - libssl-dev
+    - libreadline6
+    - libreadline6-dev
+    - libyaml-dev
+    - libsqlite3-dev
+    - sqlite3
+
+- name: Download the Bosh CLI V6.2.0
+  get_url: 
+    url: https://github.com/cloudfoundry/bosh-cli/releases/download/v6.2.0/bosh-cli-6.2.0-linux-amd64
+    dest: /opt
+
+- name: Rename the Bosh CLI and make it executable 
+  shell: " mv /opt/bosh-cli-6.2.0-linux-amd64 bosh && chmod +x ./bosh && sudo mv ./bosh /usr/local/bin/bosh "
+  

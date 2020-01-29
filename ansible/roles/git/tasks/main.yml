@@ -1,0 +1,9 @@
+---
+- name: Update Repository
+  apt:
+    update_cache: yes
+    
+- name: Install Git package
+  apt:
+    name: git
+    state: present

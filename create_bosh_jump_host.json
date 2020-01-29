@@ -1,0 +1,47 @@
+{
+  "variables": {
+    "project_id": ""
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "machine_type": "n1-standard-2",
+      "source_image_family": "ubuntu-1604-lts",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "image_name": "bosh-jump-host",
+      "disk_size": 100,
+      "disk_type": "pd-ssd",
+      "ssh_username": "root"
+    }
+  ],
+  "_comment": "Running Ansible roles on the Image",
+  "description": "Image for Bosh Jump Host in Google cloud",
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./scripts/ansible.sh"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./ansible/site.yml",
+      "role_paths": [
+        "./ansible/roles/git",
+        "./ansible/roles/bosh_cli"
+      ],
+      "group_vars": "./ansible/group_vars"
+    },
+    {
+      "type": "shell",
+      "script": "./scripts/cleanup.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "output": "manifest.json",
+      "strip_path": true,
+      "type": "manifest"
+    }
+  ]
+}
